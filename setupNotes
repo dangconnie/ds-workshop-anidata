@@ -1,0 +1,116 @@
+DS Workshop Steps 
+
+
+=============================================
+======== Project Tab in cmd line ============
+=============================================
+
+Set up project folder. Make a .py file inside it and import pandas in the file. Might have to $ sudo pip install pandas. (I used atl.py for this project.)
+
+
+
+
+=============================================
+======== Run Docker in Terminal =============
+=============================================
+
+1) To check if Docker is properly installed, type $ docker version into terminal.
+
+2) Pull project: $ docker pull anidata/python-dev
+
+3) $ docker run -d -p 8888:8888 -p 3000:3000 -p 8080:8080 -p 8000:8000 -v /Users/conniedang:/root/workspace --name python-dev anidata/python-dev tail -f /dev/null
+	++++ https://hub.docker.com/r/anidata/python-dev/
+	++++ opens ports and starts container in the background. You can then access shell in the container.
+
+4) $ docker exec -it python-dev /bin/bash
+
+5) $ cd /root/workspace/Desktop/DigitalCrafts/anidata/DSWorkshop/
+
+6) $ cat atl.py
+	++++++ this command should initiate the mirroring. Now, whatever changes you make in the file can be seen in the command line.
+
+
+
+
+
+=============================================
+======== Docker Running Tab in cmd line =====
+=============================================
+
+Once Docker is running, set up a mirror to project on Sublime. Changes made in file will appear in terminal if done correctly.
+
+
+
+
+
+=============================================
+=========== Other Docker Commands ===========
+=============================================
+$ docker stop python-dev  ----> stop running project
+$ docker rm python-dev    ----> remove
+
+
+
+
+=============================================
+================ POSTGRES SQL ===============
+=============================================
+$ docker ps
+$ docker exec -it db psql 
+	-------> You should get psql (9.6.4)
+
+										=============================================
+												CMD line for creating PostgresDB
+												Create a database called "titanic"
+										=============================================
+
+										root=# create database titanic;
+										CREATE DATABASE
+										root=# \c titanic
+										You are now connected to database "titanic" as user "root".
+										titanic=# create table "class_agg" ("index" INTEGER, "pclass" INTEGER, "count" INTEGER);
+										CREATE TABLE
+										titanic=# INSERT INTO "class_agg" ("index", "pclass", "count") VALUES
+										titanic-# (0, 1, 10),
+										titanic-# (1, 2, 30),
+										titanic-# (2, 3, 20);
+										INSERT 0 3
+										titanic=# select * from titanic;
+										ERROR:  relation "titanic" does not exist
+										LINE 1: select * from titanic;
+										                      ^
+										titanic=# select * from class_agg;
+										 index | pclass | count 
+										-------+--------+-------
+										     0 |      1 |    10
+										     1 |      2 |    30
+										     2 |      3 |    20
+										(3 rows)
+
+										titanic=# 
+
+
+
+
+										\q to quit out of db and go back to computer's cmd line
+
+
+
+After DB is set up: 										
+$ docker exec -it python-dev /bin/bash
+$ cd ~/workspace/
+
+Then, git clone the repo into the workspace. cd into folder.
+
+
+(We switched over to the cloned version at this point.)
+
+
+=============================================
+================ API Calls ==================
+=============================================
+cd into titanic.py and run it in the terminal.
+
+$ python titanic.py
+	---> In localhost:8000, we see that we're missing psycopg2, so pip install it.
+$ pip install psycopg2
